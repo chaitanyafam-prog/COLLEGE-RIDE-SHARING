@@ -4,7 +4,7 @@ import { useAuth } from '../context/useAuth.js'
 const features = [
   { title: 'Search rides', text: 'Find a ride to the airport, station or mall.', to: '/rides' },
   { title: 'Post a ride', text: 'Offer seats on your next trip.', role: 'driver', to: '/rides/new' },
-  { title: 'My bookings', text: 'Track requests and payments.', role: 'rider' },
+  { title: 'My bookings', text: 'Track requests and payments.', role: 'rider', to: '/bookings' },
 ]
 
 export default function Dashboard() {
