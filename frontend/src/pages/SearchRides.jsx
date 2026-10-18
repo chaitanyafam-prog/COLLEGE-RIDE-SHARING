@@ -22,37 +22,37 @@ function RideCard({ ride, canBook }) {
   }
 
   return (
-    <li className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <li>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="font-semibold">
+          <h2>
             {ride.origin} <span className="text-slate-400">→</span> {ride.destination}
-          </p>
+          </h2>
           <p className="mt-0.5 text-sm text-slate-500">{formatTime(ride.departure_time)}</p>
           <p className="mt-2 text-sm text-slate-600">
             {ride.driver_name} · ★ {ride.rating} · {ride.model} ({ride.vehicle_type})
           </p>
         </div>
         <div className="text-right">
-          <p className="text-lg font-bold text-indigo-600">₹{Number(ride.price_per_seat).toFixed(0)}</p>
+          <p className="text-2xl font-extrabold leading-none text-slate-900">₹{Number(ride.price_per_seat).toFixed(0)}</p>
           <p className="text-xs text-slate-500">per seat · {ride.seats_available} left</p>
         </div>
       </div>
 
       {canBook && state.status !== 'done' && (
-        <div className="mt-3 flex items-center gap-2 border-t border-slate-100 pt-3">
+        <div className="mt-4 flex items-center gap-2">
           <label className="text-sm text-slate-600" htmlFor={`seats-${ride.ride_id}`}>Seats</label>
           <select id={`seats-${ride.ride_id}`} value={seats} onChange={(e) => setSeats(Number(e.target.value))}
-            className="rounded-md border border-slate-300 px-2 py-1 text-sm">
+            className="rounded-md border border-slate-300 bg-slate-50 px-2 py-1 text-base">
             {Array.from({ length: ride.seats_available }, (_, i) => i + 1).map((n) => <option key={n}>{n}</option>)}
           </select>
           <button onClick={book} disabled={state.status === 'busy'}
-            className="ml-auto rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60">
+            className="ml-auto rounded-md bg-indigo-600 px-4 py-1.5 text-base font-medium text-slate-50 hover:bg-indigo-700 disabled:opacity-60">
             {state.status === 'busy' ? 'Requesting…' : 'Request seat'}
           </button>
         </div>
       )}
-      {state.status === 'done' && <p className="mt-3 text-sm text-green-700">{state.message}</p>}
+      {state.status === 'done' && <p className="mt-3 text-sm font-semibold text-green-700">{state.message}</p>}
       {state.status === 'error' && <p className="mt-3 text-sm text-red-600">{state.message}</p>}
     </li>
   )
@@ -110,31 +110,32 @@ export default function SearchRides() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Find a ride</h1>
-      <form onSubmit={onSubmit} className="mt-4 grid gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-4 sm:items-end">
+      <p className="eyebrow">Rides</p>
+      <h1 className="mt-3">Find a ride</h1>
+      <form onSubmit={onSubmit} className="mt-6 grid gap-4 border-t-2 border-slate-900 pt-4 sm:grid-cols-12 sm:items-end sm:[&>*:nth-child(-n+2)]:col-span-4 sm:[&>*:nth-child(3)]:col-span-2 sm:[&>*:nth-child(4)]:col-span-2">
         {locationSelect('origin_id', 'From')}
         {locationSelect('destination_id', 'To')}
         <FormField label="Date" htmlFor="on_date">
           <input id="on_date" type="date" className={inputClass} value={filters.on_date} onChange={set('on_date')} />
         </FormField>
         <div className="flex gap-2">
-          <button type="submit" className="flex-1 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+          <button type="submit" className="flex-1 rounded-md bg-indigo-600 px-4 py-2 text-base font-medium text-slate-50 hover:bg-indigo-700">
             Search
           </button>
-          <button type="button" onClick={clear} className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50">
+          <button type="button" onClick={clear} className="rounded-md border border-slate-300 px-3 py-2 text-base hover:border-slate-900">
             Clear
           </button>
         </div>
       </form>
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-8 space-y-3">
         <ErrorBanner message={error} />
         {loading ? (
           <Spinner label="Searching rides…" />
         ) : rides && rides.length === 0 ? (
-          <p className="py-10 text-center text-slate-500">No rides match. Try different filters.</p>
+          <div className="border-y border-slate-300 py-10"><h2>No rides match</h2><p className="mt-1 text-slate-500">Try a different pickup, destination or date, or clear the filters.</p></div>
         ) : (
-          <ul className="space-y-3">
+          <ul className="ledger">
             {rides?.map((r) => (
               <RideCard key={r.ride_id} ride={r}
                 canBook={user.roles.includes('rider') && r.driver_id !== user.user_id} />

@@ -86,8 +86,8 @@ export default function Register() {
 
   return (
     <div className="mx-auto max-w-lg">
-      <h1 className="mb-6 text-2xl font-bold">Create your account</h1>
-      <form onSubmit={onSubmit} noValidate className="space-y-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+      <h1 className="mb-8">Create your account</h1>
+      <form onSubmit={onSubmit} noValidate className="space-y-4 border-t-2 border-slate-900 pt-6">
         <ErrorBanner message={error || collegesError} />
         {text('name', 'Full name', { autoComplete: 'name' })}
         <FormField label="College" htmlFor="college_id" error={errors.college_id}>

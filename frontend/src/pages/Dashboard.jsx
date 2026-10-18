@@ -1,44 +1,36 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/useAuth.js'
 
-const features = [
-  { title: 'Search rides', text: 'Find a ride to the airport, station or mall.', to: '/rides' },
-  { title: 'Post a ride', text: 'Offer seats on your next trip.', role: 'driver', to: '/rides/new' },
-  { title: 'My bookings', text: 'Track requests and payments.', role: 'rider', to: '/bookings' },
+const sections = [
+  { no: '01', title: 'Search rides', text: 'Find a ride to the airport, station or mall.', to: '/rides' },
+  { no: '02', title: 'Post a ride', text: 'Offer seats on your next trip.', role: 'driver', to: '/rides/new' },
+  { no: '03', title: 'My bookings', text: 'Track requests and payments.', role: 'rider', to: '/bookings' },
 ]
 
 export default function Dashboard() {
   const { user } = useAuth()
-  const visible = features.filter((f) => !f.role || user.roles.includes(f.role))
+  const visible = sections.filter((s) => !s.role || user.roles.includes(s.role))
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Hello, {user.name}</h1>
-      <div className="mt-2 flex gap-2">
-        {user.roles.map((r) => (
-          <span key={r} className="rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium capitalize text-indigo-700">
-            {r}
-          </span>
-        ))}
-      </div>
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        {visible.map((f) => {
-          const card = (
-            <>
-              <h2 className="font-semibold">{f.title}</h2>
-              <p className="mt-1 text-sm text-slate-500">{f.text}</p>
-              {!f.to && <p className="mt-3 text-xs font-medium uppercase tracking-wide text-slate-400">Coming soon</p>}
-            </>
-          )
-          return f.to ? (
-            <Link key={f.title} to={f.to} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm hover:border-indigo-400">
-              {card}
+    <div className="grid gap-x-8 gap-y-8 md:grid-cols-12">
+      <header className="md:col-span-5">
+        <p className="eyebrow">{user.roles.join(' · ')}</p>
+        <h1 className="mt-3">Hello, {user.name}</h1>
+      </header>
+
+      <nav aria-label="Sections" className="md:col-span-7">
+        <div className="ledger">
+          {visible.map((s) => (
+            <Link key={s.title} to={s.to} className="ledger-row grid grid-cols-[48px_1fr] items-baseline no-underline">
+              <span className="text-sm text-slate-500">{s.no}</span>
+              <div>
+                <h2 className="text-slate-900">{s.title}</h2>
+                <p className="mt-1 text-slate-500">{s.text}</p>
+              </div>
             </Link>
-          ) : (
-            <div key={f.title} className="rounded-lg border border-dashed border-slate-300 bg-white p-5">{card}</div>
-          )
-        })}
-      </div>
+          ))}
+        </div>
+      </nav>
     </div>
   )
 }

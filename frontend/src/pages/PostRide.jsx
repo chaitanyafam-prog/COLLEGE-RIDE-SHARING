@@ -149,7 +149,7 @@ export default function PostRide() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <h1 className="mb-6 text-2xl font-bold">Post a ride</h1>
+      <h1 className="mb-8">Post a ride</h1>
 
       {vehicles.length === 0 || addingVehicle ? (
         <div className="space-y-3">
@@ -164,7 +164,7 @@ export default function PostRide() {
           />
         </div>
       ) : (
-        <form onSubmit={submit} noValidate className="space-y-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+        <form onSubmit={submit} noValidate className="space-y-4 border-t-2 border-slate-900 pt-6">
           {posted && (
             <div role="status" className="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
               Ride posted! Riders can find it in <Link to="/rides" className="font-medium underline">Find a ride</Link>.

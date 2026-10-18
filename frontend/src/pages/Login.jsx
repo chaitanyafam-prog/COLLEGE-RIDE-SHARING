@@ -29,8 +29,8 @@ export default function Login() {
 
   return (
     <div className="mx-auto max-w-sm">
-      <h1 className="mb-6 text-2xl font-bold">Log in</h1>
-      <form onSubmit={onSubmit} className="space-y-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+      <h1 className="mb-8">Log in</h1>
+      <form onSubmit={onSubmit} className="space-y-4 border-t-2 border-slate-900 pt-6">
         <ErrorBanner message={error} />
         <FormField label="College email" htmlFor="email">
           <input id="email" type="email" required autoComplete="email" className={inputClass}
