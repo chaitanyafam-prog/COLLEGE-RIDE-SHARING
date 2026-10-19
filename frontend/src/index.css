@@ -1,71 +1,87 @@
 @import "tailwindcss";
 
 /*
-  Campus Rides: editorial theme.
-  Palette: off-white ground #F8FAFC, ink #1E1702, deep brown #342005 (the single accent),
-  sage #8C8858 (rules and focus only, too light for small text), cream #E5E3E4.
-  Overriding Tailwind's tokens re-themes every existing utility class at once.
+  Campus Rides: illustrated-campus theme.
+  A painted campus scene (public/images/bg.jpg) sits behind frosted cream panels; forest green is the
+  single accent. Overriding Tailwind's tokens re-themes every existing utility class at once.
 */
 @theme {
-  --font-sans: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
 
-  /* neutrals, warmed toward the olive/brown ink */
-  --color-slate-50: #F8FAFC;
-  --color-slate-100: #EFEDEE;
-  --color-slate-200: #E5E3E4;
-  --color-slate-300: #C9C6B4;
-  --color-slate-400: #8C8858;
-  --color-slate-500: #5E5A3A;
-  --color-slate-600: #4A4120;
-  --color-slate-700: #342005;
-  --color-slate-900: #1E1702;
+  /* neutrals, tinted toward leaf green */
+  --color-slate-50: #F7F5EC;
+  --color-slate-100: #E8EEE7;
+  --color-slate-200: #E3E0D7;
+  --color-slate-300: #D8D5C9;
+  --color-slate-400: #8FA08A;
+  --color-slate-500: #5A6B5F;
+  --color-slate-600: #43564A;
+  --color-slate-700: #36443A;
+  --color-slate-900: #262822;
 
-  /* the one accent: deep brown, with ink for hover */
-  --color-indigo-100: #E5E3E4;
-  --color-indigo-400: #8C8858;
-  --color-indigo-500: #342005;
-  --color-indigo-600: #342005;
-  --color-indigo-700: #1E1702;
+  /* the one accent: forest green */
+  --color-indigo-100: #E8EEE7;
+  --color-indigo-400: #8FA08A;
+  --color-indigo-500: #293B30;
+  --color-indigo-600: #293B30;
+  --color-indigo-700: #1B2A21;
 
-  /* status colours, desaturated to sit inside the palette */
-  --color-green-50: #EEF0E2;
-  --color-green-100: #E1E5C8;
-  --color-green-200: #C9CEA8;
-  --color-green-700: #3F4A18;
-  --color-red-50: #F6ECE8;
-  --color-red-100: #EBD3CB;
-  --color-red-200: #E3C3B8;
-  --color-red-600: #8A2F1B;
+  --color-green-50: #EAF2E3;
+  --color-green-100: #DCE9D0;
+  --color-green-200: #C3D8B1;
+  --color-green-700: #2F5A1E;
+  --color-red-50: #F8ECE8;
+  --color-red-100: #EFD6CE;
+  --color-red-200: #E5C3B8;
+  --color-red-600: #9A3220;
   --color-red-700: #7A2615;
-  --color-amber-100: #EADFB9;
-  --color-amber-700: #5E4508;
+  --color-amber-100: #F0E6BE;
+  --color-amber-700: #6B4E0A;
 
-  /* square, flat: no shadows, minimal radius */
-  --radius-md: 2px;
-  --radius-lg: 2px;
-  --shadow-sm: 0 0 #0000;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgb(26 43 34 / 0.08);
 }
 
+/* root size grows gently on large monitors so rem-based sizing scales with the screen */
 html {
-  font-size: 16px;
+  font-size: clamp(16px, 0.4vw + 9.5px, 19px);
+}
+
+/* shared width for the navbar and main panel: ~94% on small screens, ~88% on desktop, capped */
+.app-container {
+  width: min(94vw, 1440px);
+  margin-inline: auto;
+}
+@media (min-width: 1024px) {
+  .app-container { width: min(88vw, 1440px); }
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply text-slate-900 antialiased;
   line-height: 1.5;
   font-variant-numeric: lining-nums tabular-nums;
+  background-color: #DDE5D6; /* neutral fallback, shown only if the scenery image is missing */
+  background-image: url("/images/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 /* typographic hierarchy: tight, heavy display; lighter, looser body */
 h1 {
-  font-size: 2.25rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 1.3rem + 2vw, 3.25rem);
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.015em;
 }
 h2 {
-  font-size: 1.125rem;
-  font-weight: 700;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
   line-height: 1.25;
 }
 p, label, li, td, th {
@@ -74,7 +90,7 @@ p, label, li, td, th {
 }
 
 .eyebrow {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -82,19 +98,33 @@ p, label, li, td, th {
   @apply text-slate-500;
 }
 
-/* ledger: ruled rows instead of boxed cards */
+/* frosted panels floating over the scenery */
+.panel {
+  background: rgb(247 245 236 / 0.95);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  border: 1px solid var(--color-slate-200);
+  border-radius: 16px;
+  padding: clamp(18px, 2.4vw, 40px);
+  box-shadow: 0 6px 24px rgb(20 30 22 / 0.12);
+}
+@media (max-width: 640px) { .panel { border-radius: 12px; } }
+.serif { font-family: var(--font-serif); }
+
+/* ride rows: white cards separated by space */
+.ledger { display: flex; flex-direction: column; gap: 12px; }
 .ledger > li, .ledger > a {
   display: block;
-  border-top: 1px solid var(--color-slate-300);
-  padding: 16px 0;
+  background: rgb(255 255 255 / 0.9);
+  border: 1px solid var(--color-slate-200);
+  border-radius: 12px;
+  padding: 18px 22px;
+  box-shadow: 0 1px 2px rgb(20 30 22 / 0.06);
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.ledger > li:last-child, .ledger > a:last-child {
-  border-bottom: 1px solid var(--color-slate-300);
-}
-a.ledger-row:hover h2 {
-  text-decoration: underline;
-  text-decoration-color: var(--color-slate-400);
-  text-underline-offset: 4px;
+.ledger > li:hover {
+  border-color: var(--color-slate-400);
+  box-shadow: 0 3px 10px rgb(20 30 22 / 0.08);
 }
 
 /* active / focus states: a single sage outline, no glow */
