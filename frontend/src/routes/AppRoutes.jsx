@@ -3,6 +3,7 @@ import ProtectedRoute from '../components/ProtectedRoute.jsx'
 import Spinner from '../components/Spinner.jsx'
 import { useAuth } from '../context/useAuth.js'
 import Dashboard from '../pages/Dashboard.jsx'
+import DriverBookings from '../pages/DriverBookings.jsx'
 import Login from '../pages/Login.jsx'
 import MyBookings from '../pages/MyBookings.jsx'
 import PostRide from '../pages/PostRide.jsx'
@@ -29,6 +30,7 @@ export default function AppRoutes() {
       />
       <Route path="/rides" element={<ProtectedRoute><SearchRides /></ProtectedRoute>} />
       <Route path="/rides/new" element={<ProtectedRoute role="driver"><PostRide /></ProtectedRoute>} />
+      <Route path="/driver/bookings" element={<ProtectedRoute role="driver"><DriverBookings /></ProtectedRoute>} />
       <Route path="/bookings" element={<ProtectedRoute role="rider"><MyBookings /></ProtectedRoute>} />
       <Route path="/login" element={<GuestOnly><Login /></GuestOnly>} />
       <Route path="/register" element={<GuestOnly><Register /></GuestOnly>} />

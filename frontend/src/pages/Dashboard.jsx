@@ -4,7 +4,8 @@ import { useAuth } from '../context/useAuth.js'
 const sections = [
   { no: '01', title: 'Search rides', text: 'Find a ride to the airport, station or mall.', to: '/rides' },
   { no: '02', title: 'Post a ride', text: 'Offer seats on your next trip.', role: 'driver', to: '/rides/new' },
-  { no: '03', title: 'My bookings', text: 'Track requests and payments.', role: 'rider', to: '/bookings' },
+  { no: '03', title: 'Ride requests', text: 'Review requests and approve riders.', role: 'driver', to: '/driver/bookings' },
+  { no: '04', title: 'My bookings', text: 'Track requests and payments.', role: 'rider', to: '/bookings' },
 ]
 
 export default function Dashboard() {

@@ -29,6 +29,7 @@ export default function Navbar() {
               <NavLink to="/rides" end className={linkClass}>Find a ride</NavLink>
               {user.roles.includes('rider') && <NavLink to="/bookings" className={linkClass}>My bookings</NavLink>}
               {user.roles.includes('driver') && <NavLink to="/rides/new" className={linkClass}>Post a ride</NavLink>}
+              {user.roles.includes('driver') && <NavLink to="/driver/bookings" className={linkClass}>Ride requests</NavLink>}
               <span className="hidden items-center gap-2 text-[15px] text-slate-600 sm:flex">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-indigo-600" aria-hidden="true">
                   {user.name?.[0]?.toUpperCase()}

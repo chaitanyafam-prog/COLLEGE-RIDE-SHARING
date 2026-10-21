@@ -281,6 +281,29 @@ def driver_rides(driver_id: int, db=Depends(get_db), user=Depends(require_driver
     ).fetchall()
 
 
+@app.get("/drivers/{driver_id}/bookings")
+def driver_bookings(driver_id: int, db=Depends(get_db), user=Depends(require_driver)):
+    """Booking requests for the signed-in driver's rides."""
+    if driver_id != user["user_id"]:
+        raise HTTPException(403, "You can only view bookings for your own rides")
+    return db.execute(
+        """
+        SELECT b.booking_id, b.status, b.seats_booked, b.requested_at,
+               u.name AS rider_name, u.email AS rider_email,
+               o.name AS origin, de.name AS destination, r.departure_time,
+               r.price_per_seat * b.seats_booked AS total_price
+        FROM bookings b
+        JOIN rides r ON r.ride_id = b.ride_id
+        JOIN users u ON u.user_id = b.rider_id
+        JOIN locations o ON o.location_id = r.origin_id
+        JOIN locations de ON de.location_id = r.destination_id
+        WHERE r.driver_id = %s
+        ORDER BY b.requested_at DESC
+        """,
+        (driver_id,),
+    ).fetchall()
+
+
 @app.post("/bookings/{booking_id}/payment", status_code=201)
 def pay_for_booking(booking_id: int, body: PaymentIn, db=Depends(get_db), user=Depends(require_rider)):
     booking = db.execute(

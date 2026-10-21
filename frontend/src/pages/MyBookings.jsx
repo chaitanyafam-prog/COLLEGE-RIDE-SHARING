@@ -38,6 +38,7 @@ function BookingCard({ booking, onChanged }) {
 
   const canCancel = booking.status === 'pending' || (booking.status === 'accepted' && !booking.payment_status)
   const canPay = booking.status === 'accepted' && !booking.payment_status
+  const wasApproved = booking.status === 'accepted' && !booking.payment_status
 
   return (
     <li>
@@ -61,6 +62,12 @@ function BookingCard({ booking, onChanged }) {
         </div>
       </div>
 
+      {wasApproved && (
+        <div role="status" className="mt-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+          Your ride request was approved. Your seat is confirmed—continue to payment below.
+        </div>
+      )}
+
       {(canPay || canCancel) && (
         <div className="mt-4 flex flex-wrap items-center gap-2">
           {canPay && (
@@ -73,7 +80,7 @@ function BookingCard({ booking, onChanged }) {
               </select>
               <button onClick={pay} disabled={busy}
                 className="rounded-md bg-indigo-600 px-4 py-1.5 text-base font-medium text-slate-50 hover:bg-indigo-700">
-                {busy ? 'Working…' : 'Pay now'}
+                {busy ? 'Working…' : 'Record demo payment'}
               </button>
             </>
           )}
@@ -85,6 +92,7 @@ function BookingCard({ booking, onChanged }) {
           )}
         </div>
       )}
+      {canPay && <p className="mt-2 text-xs text-slate-500">Payment currently records a demo transaction; no external payment gateway is connected.</p>}
       {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
     </li>
   )
@@ -105,10 +113,10 @@ export default function MyBookings() {
   }, [user.user_id])
 
   useEffect(() => {
-    api.get(`/riders/${user.user_id}/bookings`)
-      .then((res) => setBookings(res.data))
-      .catch((err) => setError(errorMessage(err)))
-  }, [user.user_id])
+    load()
+    const timer = window.setInterval(load, 15000)
+    return () => window.clearInterval(timer)
+  }, [load])
 
   return (
     <div>
